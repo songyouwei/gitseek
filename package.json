@@ -6,7 +6,12 @@
     "start": "node node_modules/react-native/local-cli/cli.js start"
   },
   "dependencies": {
+    "octokat": "^0.4.17",
     "react": "^0.14.8",
-    "react-native": "^0.24.1"
+    "react-native": "^0.24.1",
+    "react-native-fs": "^1.3.0",
+    "react-native-router-flux": "^2.3.13",
+    "react-native-tab-navigator": "git+ssh://git@github.com:songyouwei/react-native-tab-navigator.git",
+    "react-native-vector-icons": "^1.3.4"
   }
 }
