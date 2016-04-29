@@ -16,7 +16,7 @@ import {Actions} from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/Octicons';
 import Api from '../Api';
 import NavBar from '../components/NavBar';
-import Avator from '../components/Avator';
+import Avatar from '../components/Avatar';
 import NavListItem from '../components/NavListItem';
 import LoadingIndicator from '../components/LoadingIndicator';
 import config from '../config';
@@ -27,12 +27,15 @@ export default class Setting extends Component {
     this._clearCache = this._clearCache.bind(this);
     this.state = {
       user: {},
-      cacheSize: 'caculating...',
+      cacheSize: '0.0M',
     };
   }
 
   _clearCache() {
-    Api.clearCache().then(res => Alert.alert(null, `cache cleared ${res?'success':'failed'}`));
+    Api.clearCache().then(res => {
+      res && this.setState({cacheSize: '0.0M'});
+      Alert.alert(null, `cache cleared ${res?'success':'failed'}`);
+    });
   }
 
   componentWillMount() {
@@ -47,14 +50,14 @@ export default class Setting extends Component {
         <Text numberOfLines={1} style={{fontSize: 15, color: '#ffffff', }} >{user.introduction}</Text>
       </View>
     );
-    let clean = (
+    let cache = (
       <Text style={{fontSize: 15, color: '#cccccc'}} >{cacheSize}</Text>
     );
     return (
       <View style={styles.container}>
         <NavBar title="Settings" hasLeftBackBtn={true} />
         <ScrollView>
-          <NavListItem icon={<Icon name="trashcan" size={25} color={config.iconColor} />} name="clear cache" rightComponent={clean} onPress={this._clearCache} />
+          <NavListItem icon={<Icon name="trashcan" size={25} color={config.iconColor} />} name="clear cache" rightComponent={cache} onPress={this._clearCache} />
           <NavListItem icon={<Icon name="info" size={25} color={config.iconColor} />} name="about" onPress={()=>Actions.about()} />
           <View style={styles.logout} >
             <TouchableOpacity style={styles.logoutButton} onPress={()=>{

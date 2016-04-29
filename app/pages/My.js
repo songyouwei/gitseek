@@ -15,7 +15,7 @@ import React, {
 import {Actions} from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/Octicons';
 import Api from '../Api';
-import Avator from '../components/Avator';
+import Avatar from '../components/Avatar';
 import LoadingIndicator from '../components/LoadingIndicator';
 import NavListItem from '../components/NavListItem';
 import config from '../config';
@@ -46,7 +46,7 @@ export default class My extends Component {
           <TouchableOpacity style={styles.settingWrapper} onPress={this.onSettingPressed} >
             <Icon name="gear" size={25} color="#fff" />
           </TouchableOpacity>
-          <Avator url={avatarUrl} size={91} />
+          <Avatar url={avatarUrl} size={91} />
           <Text style={styles.authorNameText}>{name}</Text>
           <Text style={styles.authorBriefText} numberOfLines={3} >{blog}</Text>
         </View>

@@ -43,14 +43,14 @@ const styles = StyleSheet.create({
   },
   textInput: {
     flex: 1,
-    fontSize: 18,
+    fontSize: 15,
   },
   cancel: {
     marginRight: 15,
     marginLeft: 15,
   },
   cancelText: {
-    fontSize: 18,
+    fontSize: 15,
     color: config.themeColor,
   },
   history: {
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
   historyItemText: {
-    fontSize: 18,
+    fontSize: 13,
     color: '#fff',
   },
   clear: {

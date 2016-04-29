@@ -52,7 +52,7 @@ let styles = StyleSheet.create({
   },
   tintText: {
   	textAlign: "center",
-  	fontSize: 18,
+  	fontSize: 15,
   	color: "#000",
   },
 });

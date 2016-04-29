@@ -9,16 +9,22 @@ import React, {
 export default class ErrorView extends Component {
   render() {
     let {msg, msgStyle} = this.props;
+    let defaultErr = "oops, fetch failed!";
     return (
     	<View style={[styles.container,this.props.style]}>
-    		<Text style={[styles.msgText,this.props.msgTextStyle]}>{msg?msg:"oops, fetch failed!"}</Text>
+    		<Text style={[styles.msgText,this.props.msgTextStyle]}>
+          {
+            msg
+            ?(typeof msg === 'string'?msg:(msg.message || defaultErr))
+            :defaultErr
+          }
+        </Text>
     	</View>
     );
   }
 };
 ErrorView.propTypes = {
-  msg: PropTypes.string,
-  msgStyle: PropTypes.object,
+  msg: PropTypes.any,
   style: PropTypes.object,
 };
 

@@ -17,9 +17,6 @@ export default class StatefulImage extends Component {
 
   render() {
     let {source, noCache} = this.props;
-    let uri = source.uri;
-    // let random = "?random="+Math.random();
-    if (uri && noCache) source={uri: uri};
     return (
       <Image
         style={[{justifyContent:'center', alignItems:'center'}, this.props.style]}
@@ -40,6 +37,6 @@ export default class StatefulImage extends Component {
   }
 };
 StatefulImage.propTypes = {
-  source: PropTypes.any.isRequired,
+  source: PropTypes.any,
   // noCache: PropTypes.bool,
 };
