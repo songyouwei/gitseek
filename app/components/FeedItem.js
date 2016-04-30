@@ -24,36 +24,6 @@ export default class FeedItem extends Component {
     super(props);
   }
 
-  _getAction(feed: Feed): string {
-    let action = 'started';
-    if (feed.type === 'ForkEvent') {
-      action = 'forked';
-    } else if (feed.type === 'WatchEvent') {
-      action = 'started';
-    } else if (feed.type === 'PushEvent') {
-      action = 'pushed';
-    } else if (feed.type === 'IssueCommentEvent') {
-      let realActoin = feed.payload.action;
-      action = realActoin + ' comment on'
-    } else if (feed.type === 'PullRequestEvent') {
-      let realActoin = feed.payload.action;
-      action = realActoin + ' pull request';
-    } else if (feed.type === 'MemberEvent') {
-      action = feed.payload.action;
-    } else if (feed.type === 'IssuesEvent') {
-      let realActoin = feed.payload.action;
-      action = realActoin + ' issue ' + '"' +  feed.payload.issue.title + '" ';
-    } else if (feed.type === 'PullRequestReviewCommentEvent') {
-      let realActoin = feed.payload.action;
-      action = realActoin + ' pull request,' + ' comment on';
-    } else if (feed.type === 'DeleteEvent') {
-      action = 'Delete';
-    } else if (feed.type === 'CreateEvent') {
-      action = 'Create';
-    }
-    return action;
-  }
-
   _getActionIconName(feed: Feed): string {
     let name = 'comment-discussion';
     if (feed.type === 'ForkEvent') {
@@ -81,14 +51,47 @@ export default class FeedItem extends Component {
     return name;
   }
 
+  _getAction(feed: Feed): string {
+    let action = 'started';
+    if (feed.type === 'ForkEvent') {
+      action = 'forked';
+    } else if (feed.type === 'WatchEvent') {
+      action = 'started';
+    } else if (feed.type === 'PushEvent') {
+      let ref = feed.payload.ref.split('/');
+      action = 'pushed to branch ' + ref[ref.length-1];
+    } else if (feed.type === 'IssueCommentEvent') {
+      let realActoin = feed.payload.action;
+      action = realActoin + ' comment on'+ ' issue #' + feed.payload.issue.number + ' "' +  feed.payload.issue.title + '" ';
+    } else if (feed.type === 'PullRequestEvent') {
+      let realActoin = feed.payload.action;
+      action = realActoin + ' pull request #' + feed.payload.number + ' "' + feed.payload.pullRequest.title + '" ';
+    } else if (feed.type === 'MemberEvent') {
+      action = feed.payload.action;
+    } else if (feed.type === 'IssuesEvent') {
+      let realActoin = feed.payload.action;
+      action = realActoin + ' issue ' + '#' + feed.payload.issue.number;
+    } else if (feed.type === 'PullRequestReviewCommentEvent') {
+      let realActoin = feed.payload.action;
+      action = realActoin + ' pull request,' + ' comment on';
+    } else if (feed.type === 'DeleteEvent') {
+      action = 'Delete';
+    } else if (feed.type === 'CreateEvent') {
+      action = 'Create';
+    }
+    return action;
+  }
+
   _getDetail(feed: Feed): string {
     let content = "";
     if (feed.type === 'PushEvent') {
       feed.payload.commits.map(commit => content += commit.message);
+    } else if (feed.type === 'IssuesEvent') {
+      content = feed.payload.issue.title;
     } else if (feed.type === 'IssueCommentEvent' || feed.type === 'PullRequestReviewCommentEvent') {
       content = feed.payload.comment.body;
     } else if (feed.type === 'PullRequestEvent') {
-      content = feed.payload.pullRequest.title;
+      content = feed.payload.pullRequest.body;
     } else if (feed.type === 'DeleteEvent' || feed.type === 'CreateEvent') {
       content = feed.payload.refType + ' ' + feed.payload.ref;
     }
@@ -128,6 +131,9 @@ export default class FeedItem extends Component {
   render() {
     let feed = this.props.feed;
     let {id, actor, createdAt, payload, repo, type} = feed;
+    let action = this._getAction(feed);
+    let detail = this._getDetail(feed);
+    let timeAgo = this._getTimeAgo(createdAt);
     return (
       <View style={[styles.container, this.props.style]}>
         <View style={styles.left}>
@@ -138,12 +144,17 @@ export default class FeedItem extends Component {
         </View>
         <View style={styles.right}>
           <Text style={styles.login}>{actor.login}</Text>
-          <Text style={styles.action}>{this._getAction(feed)}</Text>
+          <Text style={styles.action}>{action}</Text>
           <Text style={styles.repo}>{repo.name}</Text>
-          <View style={styles.detailWrapper}>
-            <Text style={styles.detail} numberOfLines={8}>{this._getDetail(feed)}</Text>
-          </View>
-          <Text style={styles.time}>{this._getTimeAgo(createdAt)}</Text>
+          {detail
+            ?
+            <View style={styles.detailWrapper}>
+              <Text style={styles.detail} numberOfLines={15}>{detail}</Text>
+            </View>
+            :
+            null
+          }
+          <Text style={styles.time}>{timeAgo}</Text>
         </View>
       </View>
     );
@@ -159,7 +170,7 @@ let styles = StyleSheet.create({
     borderRadius: 5,
     borderColor: '#ccc',
     marginTop: 30,
-    backgroundColor: 'rgb(235,235,235)',
+    backgroundColor: '#fafafa',
   },
   left: {
     position: 'absolute',
@@ -179,24 +190,27 @@ let styles = StyleSheet.create({
     color: config.themeColor,
   },
   action: {
-    fontWeight: 'bold',
+    fontWeight: '300',
+    marginTop: 1,
   },
   repo: {
     color: config.themeColor,
+    marginTop: 1,
   },
   detailWrapper: {
     marginTop: 10,
-    marginBottom: 10,
     marginRight: 10,
     borderStyle: 'dashed',
+    backgroundColor: 'rgb(240,240,240)',
   },
   detail: {
-    color: '#666666',
+    color: '#666',
     fontSize: 13,
-    fontWeight: 'normal',
+    padding: 5,
   },
   time: {
-    fontSize: 11,
+    fontSize: 12,
     color: 'grey',
+    marginTop: 10,
   },
 });
