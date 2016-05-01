@@ -22,7 +22,7 @@ export default class App extends Component {
     super(props);
     if (Platform.OS === 'ios') {
       StatusBar.setHidden(false);
-      StatusBar.setBarStyle('light-content', true);
+      // StatusBar.setBarStyle('light-content', true);
     } else {
       BackAndroid.addEventListener('hardwareBackPress', ()=>{
         try {

@@ -187,23 +187,26 @@ let styles = StyleSheet.create({
     marginLeft: 55,
   },
   login: {
-    color: config.themeColor,
+    color: config.linkColor,
+    fontWeight: '400',
   },
   action: {
-    fontWeight: '300',
+    fontWeight: '400',
     marginTop: 1,
   },
   repo: {
-    color: config.themeColor,
+    color: config.linkColor,
     marginTop: 1,
+    fontWeight: '400',
   },
   detailWrapper: {
     marginTop: 10,
     marginRight: 10,
     borderStyle: 'dashed',
-    backgroundColor: 'rgb(240,240,240)',
+    backgroundColor: config.backgroundColor,
   },
   detail: {
+    fontWeight: '500',
     color: '#666',
     fontSize: 13,
     padding: 5,

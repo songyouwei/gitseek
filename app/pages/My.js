@@ -44,7 +44,7 @@ export default class My extends Component {
       <ScrollView style={styles.container} >
         <View style={styles.briefInfo} >
           <TouchableOpacity style={styles.settingWrapper} onPress={this.onSettingPressed} >
-            <Icon name="gear" size={25} color="#fff" />
+            <Icon name="gear" size={25} color="#666" />
           </TouchableOpacity>
           <Avatar url={avatarUrl} size={91} />
           <Text style={styles.authorNameText}>{name}</Text>
@@ -76,7 +76,7 @@ let styles = StyleSheet.create({
   },
   briefInfo: {
     height: 276,
-    backgroundColor: 'rgb(53,59,55)',
+    backgroundColor: config.darkerBackgroundColor,
     justifyContent: 'center',
     alignItems: 'center',
     paddingTop: Platform.OS==='ios'?10:0,
@@ -92,13 +92,11 @@ let styles = StyleSheet.create({
     height: 25,
   },
   authorNameText: {
-    color: '#ffffff',
     fontSize: 15,
     fontWeight: 'bold',
     marginTop: 12,
   },
   authorBriefText: {
-    color: '#ffffff',
     fontSize: 14,
     textAlign: 'center',
     marginTop: 14,
@@ -114,7 +112,6 @@ let styles = StyleSheet.create({
     alignItems: 'center',
   },
   tintInfoText: {
-    color: '#777777',
     fontSize: 15,
     marginTop: 10,
   },

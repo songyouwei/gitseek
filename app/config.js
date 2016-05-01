@@ -5,7 +5,10 @@ export default config = {
   userAgent: 'GitSeek',
 
   iconColor: '#bbb',
-  themeColor: 'rgb(29,157,234)',
-  barColor: 'rgb(35,35,40)',
-  backgroundColor: 'rgb(235,235,241)',
+  themeColor: '#1d9dea',
+  barColor: '#fff',
+  fontColor: '#000',
+  backgroundColor: '#f0f0f0',
+  darkerBackgroundColor: '#dbdbdb',
+  linkColor: '#1d9dea',
 };

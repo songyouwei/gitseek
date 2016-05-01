@@ -27,7 +27,7 @@ export default class NavBar extends Component {
         <View style={styles.left}>
           {hasLeftBackBtn?
           <TouchableOpacity onPress={()=>Actions.pop()}>
-            <Icon name="chevron-left" size={25} color="#fff" />
+            <Icon style={{color: config.fontColor}} name="chevron-left" size={25} />
           </TouchableOpacity>:null}
         </View>
         <View style={styles.title}><Text style={styles.titleTxt}>{title}</Text></View>
@@ -67,7 +67,7 @@ let styles = StyleSheet.create({
   titleTxt: {
     fontWeight: 'bold',
     fontSize: 17,
-    color: '#fff',
+    color: config.fontColor,
   },
   right: {
     flex: 1,

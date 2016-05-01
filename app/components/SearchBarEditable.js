@@ -23,9 +23,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingTop: Platform.OS==='ios'?26:6,
     paddingBottom: 6,
-    borderBottomWidth: 1,//divider
-    borderBottomColor: '#1d2023',
-    backgroundColor: '#293038',
+    backgroundColor: config.barColor,
     alignItems: "center",
   },
   search: {
@@ -54,7 +52,6 @@ const styles = StyleSheet.create({
     color: config.themeColor,
   },
   history: {
-    backgroundColor: '#293038',
   },
   historyItem: {
     marginTop: 16,
@@ -62,7 +59,6 @@ const styles = StyleSheet.create({
   },
   historyItemText: {
     fontSize: 13,
-    color: '#fff',
   },
   clear: {
     marginTop: 16,
@@ -70,7 +66,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderTopWidth: 1,//divider
-    borderTopColor: '#3f454c',
+    borderTopColor: '#ddd',
+    borderBottomWidth: 1,//divider
+    borderBottomColor: '#ddd',
   },
   clearText: {
     fontSize: 15,
