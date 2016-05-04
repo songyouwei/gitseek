@@ -50,5 +50,6 @@ let styles = StyleSheet.create({
     borderRadius: 18,
     borderWidth: 1.5,
     borderColor: '#ccc',
+    backgroundColor: '#fff',
   },
 });

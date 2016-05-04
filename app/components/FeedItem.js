@@ -46,7 +46,7 @@ export default class FeedItem extends Component {
     } else if (feed.type === 'DeleteEvent') {
       name = 'x';
     } else if (feed.type === 'CreateEvent') {
-      name = 'gist';
+      name = 'tag';
     }
     return name;
   }
@@ -75,9 +75,9 @@ export default class FeedItem extends Component {
       let realActoin = feed.payload.action;
       action = realActoin + ' pull request,' + ' comment on';
     } else if (feed.type === 'DeleteEvent') {
-      action = 'Delete';
+      action = 'deleted ' + feed.payload.refType + ' "' + feed.payload.ref + '" at';
     } else if (feed.type === 'CreateEvent') {
-      action = 'Create';
+      action = 'created ' + feed.payload.refType + ' "' + feed.payload.ref + '" at';
     }
     return action;
   }
@@ -137,7 +137,7 @@ export default class FeedItem extends Component {
     return (
       <View style={[styles.container, this.props.style]}>
         <View style={styles.left}>
-          <Avatar style={styles.avatar} url={actor.avatarUrl} size={55} />
+          <Avatar style={styles.avatar} url={actor.avatarUrl} size={56} />
           <View style={styles.actionIcon}>
             <Icon name={this._getActionIconName(feed)} size={25} color="#666" />
           </View>
@@ -169,12 +169,12 @@ let styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     borderColor: '#ccc',
-    marginTop: 30,
+    marginTop: 35,
     backgroundColor: '#fafafa',
   },
   left: {
     position: 'absolute',
-    top: -25,
+    top: -28,
   },
   avatar: {
   },
@@ -189,14 +189,15 @@ let styles = StyleSheet.create({
   login: {
     color: config.linkColor,
     fontWeight: '400',
+    fontSize: 15,
   },
   action: {
     fontWeight: '400',
-    marginTop: 1,
+    marginTop: 5,
   },
   repo: {
     color: config.linkColor,
-    marginTop: 1,
+    marginTop: 5,
     fontWeight: '400',
   },
   detailWrapper: {

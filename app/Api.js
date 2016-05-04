@@ -59,23 +59,40 @@ export default class Api {
 
   static getFeeds(): Promise<Feed[]> {
     if(AppState.account && AppState.account.login)
-      return Api.octo.users(AppState.account.login).receivedEvents.fetch();
+      return Api.octo.users(AppState.account.login).receivedEvents.fetch({per_page: config.pageSize});
     else return new Promise(function(resolve, reject) {
       reject("account is null");
     });
   }
 
-  static getTrends(): Promise<Trend[]> {
-    if(AppState.account && AppState.account.login)
-      return Api.octo.users(AppState.account.login).receivedEvents.fetch();
-    else return new Promise((resolve, reject) => {
-      reject();
+  static getTrends(language: string): Promise<SearchResult> {
+    // let current = new Date();
+    // let lengthOfADay = 86400000;//1000*60*60*24
+    // let lastDay = new Date(current.valueOf() - lengthOfADay);
+    // let lastWeek = new Date(current.valueOf() - lengthOfADay*7);
+    // let lastMonth = new Date(current.valueOf() - lengthOfADay*30);
+    //
+    // let queryDate = lastWeek.toISOString();
+    // language = language? 'language:'+language : undefined;
+    // let pushed = 'pushed:>' + queryDate;
+    //
+    // let q = pushed + ' ' + language;
+    // return Api.octo.search.repositories.fetch({per_page: config.pageSize, sort: 'stars', q: q});
+
+    let url = 'http://trending.codehub-app.com/v2/trending' + '?since=daily&language=' + language;
+    return new Promise((resolve, reject) => {
+      fetch(url).then(res => {
+        if (res.status<200 && res.status>=300) reject('fetch error');
+	      return res.json();
+      }).then(res => {
+        res instanceof Array && resolve(res);
+      });
     });
   }
 
   static search(keyword: String): Promise<SearchResult> {
     SearchHistoryDao.add(keyword);
-    return Api.octo.search.repositories.fetch({q: keyword});
+    return Api.octo.search.repositories.fetch({per_page: config.pageSize, q: keyword});
   }
 
   static getSearchHistorys(): Promise<string[]> {

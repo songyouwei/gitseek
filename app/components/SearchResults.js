@@ -13,6 +13,7 @@ import React, {
   Platform,
 }  from 'react-native';
 import {Actions} from 'react-native-router-flux';
+import RepoItem from './RepoItem';
 
 export default class SearchResults extends Component {
   constructor(props) {
@@ -21,12 +22,13 @@ export default class SearchResults extends Component {
 
   render() {
     let results = this.props.results;
-    console.log(results);
     let items = [];
-    // if(results) results.map((result)=>{
-    //   items.push(
-    //   );
-    // });
+    !(results instanceof Array) && (results = results.items);
+    results && results instanceof Array && results.map(repo => {
+      items.push(
+        <RepoItem repo={repo} key={repo.id} />
+      );
+    });
     if (results.length>0) {
       return (
         <ScrollView>
@@ -36,7 +38,7 @@ export default class SearchResults extends Component {
     } else {
       return (
         <View style={styles.none}>
-          <Text style={styles.noneText}>抱歉，没找到相关内容</Text>
+          <Text style={styles.noneText}>Sorry, nothing match with this keyword</Text>
         </View>
       );
     }
@@ -92,10 +94,6 @@ let styles = StyleSheet.create({
     height: 12.5,
     marginRight: 8,
   },
-  statisticsText: {
-    fontSize: 12,
-    color: '#fff',
-  },
   none: {
     alignItems: 'center',
     marginTop: 89,
@@ -107,6 +105,5 @@ let styles = StyleSheet.create({
   },
   noneText: {
     fontSize: 18,
-    color: '#fff',
   },
 });

@@ -11,4 +11,6 @@ export default config = {
   backgroundColor: '#f0f0f0',
   darkerBackgroundColor: '#dbdbdb',
   linkColor: '#1d9dea',
+
+  pageSize: 30,
 };

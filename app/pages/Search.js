@@ -34,7 +34,12 @@ export default class Search extends Component {
       keyword: keyword,
       searchState: "loading",
     });
-    Api.search(keyword);
+    Api.search(keyword).then(res => {
+      this.setState({
+        results: res,
+        searchState: "loaded",
+      });
+    }, err => this.setState({searchState: 'error'}));
   }
 
   render() {

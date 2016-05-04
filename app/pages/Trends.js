@@ -14,6 +14,9 @@ import React, {
 import {Actions} from 'react-native-router-flux';
 import Api from '../Api';
 import ErrorView from '../components/ErrorView';
+import NavBar from '../components/NavBar';
+import FeedItem from '../components/FeedItem';
+import RepoItem from '../components/RepoItem';
 import config from '../config';
 
 export default class Trends extends Component {
@@ -24,39 +27,56 @@ export default class Trends extends Component {
     this.state = {
       isLoading: true,
       results: [],
+      err: null,
     };
   }
 
   componentDidMount() {
-    InteractionManager.runAfterInteractions(() => {
-      this._fetchData();
-    });
+    //set timeout to fix a refresh state problem
+    setTimeout(this._fetchData, 0);
   }
 
   _fetchData() {
     this.setState({
       isLoading: true,
     });
-    // Api.getHome().;
+    Api.getTrends('javascript').then(res => {
+      this.setState({
+        isLoading: false,
+        results: res,
+      });
+    }, err => {
+      this.setState({
+        isLoading: false,
+        err: err,
+      });
+    });
   }
 
   render() {
-    let {isLoading, results} = this.state;
-    let tagSlides = [];
+    let {isLoading, results, err} = this.state;
+    let items = [];
+    !(results instanceof Array) && (results = results.items);
+    results && results instanceof Array && results.map(repo => {
+      items.push(
+        <RepoItem repo={repo} key={repo.id} />
+      );
+    });
     return (
       <View style={styles.container}>
+        <NavBar title="Trending" />
         <ScrollView
           style={styles.scrollView}
           refreshControl={
             <RefreshControl
-              refreshing={this.state.isLoading}
-              onRefresh={this.fetchData}
+              refreshing={isLoading}
+              onRefresh={this._fetchData}
             />
           }>
           {
-            results
-            ?(tagSlides.length>0?tagSlides:null)
-            :<ErrorView />
+            !err && results
+            ?(items.length>0?items:null)
+            :<ErrorView msg={err} />
           }
         </ScrollView>
       </View>
@@ -72,6 +92,6 @@ let styles = StyleSheet.create({
   },
   scrollView: {
     flex: 1,
-    padding: 10,
+    padding: 5,
   },
 });
