@@ -50,11 +50,27 @@ export default class Api {
   }
 
   static getLoggedUser(): Promise<User> {
-    if (AppState.user)
-      return new Promise((resolve, reject) => {
-        resolve(AppState.user);
+    return new Promise((resolve, reject) => {
+      AppState.user && resolve(AppState.user)
+      ||
+      Api.octo.users(AppState.account.login).read().then(res => {
+        resolve(JSON.parse(res));
+      }, err => reject(err))
+    });
+  }
+
+  static getUserStarsCount(userLogin = AppState.account.login : string): Promise<number> {
+    return new Promise((resolve, reject) => {
+      Api.octo.users(userLogin).starred.fetch({per_page: 1}).then(res => {
+        let splitted = res.lastPageUrl && res.lastPageUrl.split('=');
+        let starsCount = splitted?splitted[splitted.length-1]:0;
+        resolve(starsCount);
       });
-    else return Api.octo.users(AppState.account.login).fetch();
+    });
+  }
+
+  static getUserRepos(userLogin = AppState.account.login : string): Promise<RepoItem[]> {
+    return Api.octo.users(userLogin).repos.fetch({sort: 'stars'});
   }
 
   static getFeeds(): Promise<Feed[]> {

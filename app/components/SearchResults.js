@@ -31,7 +31,7 @@ export default class SearchResults extends Component {
     });
     if (results.length>0) {
       return (
-        <ScrollView>
+        <ScrollView style={styles.scrollView}>
           {items}
         </ScrollView>
       );
@@ -45,63 +45,17 @@ export default class SearchResults extends Component {
   }
 };
 SearchResults.propTypes = {
-  results: PropTypes.array,
+  results: PropTypes.any,
 };
 
 let styles = StyleSheet.create({
-  item: {
-    flexDirection: 'row',
-    marginLeft: 10,
-    marginRight: 10,
-    paddingTop: 16,
-    paddingBottom: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#343739',
-  },
-  coverImg: {
-    width: 160,
-    height: 120,
-  },
-  info: {
+  scrollView: {
     flex: 1,
-    height: 120,
-    marginLeft: 12,
-    marginBottom: 4,
-  },
-  titleText: {
-    flex: 1,
-    fontSize: 17,
-    color: '#fff',
-  },
-  more: {
-    flex: 1,
-    justifyContent: 'flex-end',
-  },
-  authorText: {
-    fontSize: 15,
-    color: '#fff',
-  },
-  statistics: {
-    flexDirection: 'row',
-    marginTop: 11,
-  },
-  statisticsItem: {
-    flex: 1,
-    flexDirection: 'row',
-  },
-  statisticsIcon: {
-    width: 12.5,
-    height: 12.5,
-    marginRight: 8,
+    padding: 5,
   },
   none: {
     alignItems: 'center',
     marginTop: 89,
-  },
-  noneIcon: {
-    width: 140,
-    height: 139,
-    marginBottom: 66,
   },
   noneText: {
     fontSize: 18,

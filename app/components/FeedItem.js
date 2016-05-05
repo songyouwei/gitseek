@@ -29,7 +29,7 @@ export default class FeedItem extends Component {
     if (feed.type === 'ForkEvent') {
       name = 'git-branch';
     } else if (feed.type === 'WatchEvent') {
-      name = 'eye';
+      name = 'star';
     } else if (feed.type === 'PushEvent') {
       name = 'git-commit';
     } else if (feed.type === 'IssueCommentEvent') {
@@ -73,7 +73,7 @@ export default class FeedItem extends Component {
       action = realActoin + ' issue ' + '#' + feed.payload.issue.number;
     } else if (feed.type === 'PullRequestReviewCommentEvent') {
       let realActoin = feed.payload.action;
-      action = realActoin + ' pull request,' + ' comment on';
+      action = realActoin + ' comment on pull request #' + feed.payload.pullRequest.number + ' "' + feed.payload.pullRequest.title + '"';
     } else if (feed.type === 'DeleteEvent') {
       action = 'deleted ' + feed.payload.refType + ' "' + feed.payload.ref + '" at';
     } else if (feed.type === 'CreateEvent') {
@@ -194,6 +194,8 @@ let styles = StyleSheet.create({
   action: {
     fontWeight: '400',
     marginTop: 5,
+    fontSize: 13,
+    color: 'grey'
   },
   repo: {
     color: config.linkColor,
@@ -207,8 +209,6 @@ let styles = StyleSheet.create({
     backgroundColor: config.backgroundColor,
   },
   detail: {
-    fontWeight: '500',
-    color: '#666',
     fontSize: 13,
     padding: 5,
   },

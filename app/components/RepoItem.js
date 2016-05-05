@@ -78,6 +78,7 @@ let styles = StyleSheet.create({
     marginTop: 1,
   },
   language: {
+    marginTop: 5,
     color: '#666',
     fontSize: 12,
   },
@@ -91,7 +92,8 @@ let styles = StyleSheet.create({
     marginRight: 15,
   },
   description: {
-    marginTop: 5,
+    marginTop: 10,
+    marginBottom: 10,
     fontWeight: '400',
   },
 });

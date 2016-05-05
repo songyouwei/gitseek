@@ -18,6 +18,7 @@ import Api from '../Api';
 import Avatar from '../components/Avatar';
 import LoadingIndicator from '../components/LoadingIndicator';
 import NavListItem from '../components/NavListItem';
+import RepoItem from '../components/RepoItem';
 import config from '../config';
 
 export default class My extends Component {
@@ -27,6 +28,8 @@ export default class My extends Component {
     this.onSettingPressed = this.onSettingPressed.bind(this);
     this.state = {
       user: {},
+      starsCount: null,
+      repos: [],
     };
   }
 
@@ -36,25 +39,56 @@ export default class My extends Component {
         user: user,
       });
     });
+    Api.getUserRepos().then(repos => {
+      this.setState({
+        repos: repos,
+      });
+    });
+    Api.getUserStarsCount().then(starsCount => {
+      this.setState({
+        starsCount: starsCount,
+      });
+    });
   }
 
   render() {
-    let {name, login, blog, email, avatarUrl,} = this.state.user;
+    let {name, login, blog, email, avatar_url, followers, following} = this.state.user;
+    let {starsCount} = this.state;
+    let repos = this.state.repos;
+    let items = [];
+    repos && repos instanceof Array && repos.map(repo => {
+      items.push(
+        <RepoItem repo={repo} key={repo.id} />
+      );
+    });
     return (
       <ScrollView style={styles.container} >
         <View style={styles.briefInfo} >
           <TouchableOpacity style={styles.settingWrapper} onPress={this.onSettingPressed} >
             <Icon name="gear" size={25} color="#666" />
           </TouchableOpacity>
-          <Avatar url={avatarUrl} size={91} />
-          <Text style={styles.authorNameText}>{name}</Text>
-          <Text style={styles.authorBriefText} numberOfLines={3} >{blog}</Text>
+          <Avatar url={avatar_url} size={91} />
+          {name && <Text style={styles.userNameText}>{name}</Text>}
+          <Text style={styles.userLoginText}>{login}</Text>
+          {blog && <Text style={styles.userBlogText}>{blog}</Text>}
         </View>
-        <View style={styles.slidesTypes} >
-          {/*<NavListItem name="喜欢的讲义" iconSource={require('../images/like.png')} onPress={()=>Actions.slideGrid({title: "喜欢的讲义", contentType: "liked", url: user.link_lecture_like})} />
-          <NavListItem name="下载的讲义" iconSource={require('../images/download.png')} onPress={()=>Actions.slideGrid({title: "下载的讲义", contentType: "downloaded"})} />
-          <NavListItem name="上传的讲义" iconSource={require('../images/upload.png')} onPress={()=>Actions.slideGrid({title: "上传的讲义", contentType: "uploaded", url: user.own})} />*/}
+        <View style={styles.statInfo}>
+          <View style={styles.statItem}>
+            <Text style={styles.statNumText}>{followers || '0'}</Text>
+            <Text style={styles.statNameText}>Followers</Text>
+          </View>
+          <View style={styles.statItem}>
+            <Text style={styles.statNumText}>{starsCount || '0'}</Text>
+            <Text style={styles.statNameText}>Stars</Text>
+          </View>
+          <View style={styles.statItem}>
+            <Text style={styles.statNumText}>{following || '0'}</Text>
+            <Text style={styles.statNameText}>Following</Text>
+          </View>
         </View>
+        <ScrollView style={styles.repos} >
+          {items}
+        </ScrollView>
       </ScrollView>
     );
   }
@@ -75,7 +109,7 @@ let styles = StyleSheet.create({
     backgroundColor: config.backgroundColor,
   },
   briefInfo: {
-    height: 276,
+    height: 225,
     backgroundColor: config.darkerBackgroundColor,
     justifyContent: 'center',
     alignItems: 'center',
@@ -91,28 +125,43 @@ let styles = StyleSheet.create({
     width: 25,
     height: 25,
   },
-  authorNameText: {
+  userNameText: {
     fontSize: 15,
     fontWeight: 'bold',
     marginTop: 12,
   },
-  authorBriefText: {
+  userLoginText: {
+    fontSize: 12,
+    color: '#666',
+    marginTop: 3,
+  },
+  userBlogText: {
     fontSize: 14,
-    textAlign: 'center',
-    marginTop: 14,
+    color: config.themeColor,
+    marginTop: 3,
     marginLeft: 25,
     marginRight: 25,
   },
-  slidesTypes: {
+  repos: {
+    flex: 1,
+    padding: 5,
   },
-  tintInfo: {
-    marginTop: 46,
-    marginBottom: 56,
+  statInfo: {
+    flexDirection: 'row',
+    backgroundColor: '#fff',
+  },
+  statItem: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingTop: 15,
+    paddingBottom: 15,
   },
-  tintInfoText: {
+  statNumText: {
     fontSize: 15,
-    marginTop: 10,
+    fontWeight: 'bold',
+  },
+  statNameText: {
+    fontSize: 12,
   },
 });

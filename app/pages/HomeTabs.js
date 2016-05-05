@@ -44,7 +44,7 @@ export default class HomeTabs extends Component {
         </TabNavigator.Item>
         <TabNavigator.Item
           selected={this.state.selectedTab === 'my'}
-          renderIcon={(selected) => <Icon name="octoface" size={25} color={selected?config.themeColor:config.iconColor} />}
+          renderIcon={(selected) => <Icon name="mark-github" size={25} color={selected?config.themeColor:config.iconColor} />}
           onPress={() => {
             // if(!Api.logined())
             //   Actions.login();
