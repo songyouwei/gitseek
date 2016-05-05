@@ -47,20 +47,19 @@ NavBar.propTypes = {
 let styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: config.barColor,
     height: Platform.OS==='ios'?64:44,
     paddingTop: Platform.OS==='ios'?20:0,
   },
   left: {
-    flex: 1,
     flexDirection: 'row',
     marginLeft: 15,
     justifyContent: 'flex-start',
     alignItems: 'center',
   },
   title: {
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -70,7 +69,6 @@ let styles = StyleSheet.create({
     color: config.fontColor,
   },
   right: {
-    flex: 1,
     flexDirection: 'row',
     justifyContent: 'flex-end',
     alignItems: 'center',

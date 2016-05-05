@@ -10,6 +10,7 @@ import React, {
   Text,
   TouchableOpacity,
 }  from 'react-native';
+import {Actions} from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/Octicons';
 import Avatar from '../components/Avatar';
 import StatefulImage from '../components/StatefulImage';
@@ -24,15 +25,31 @@ export default class RepoItem extends Component {
     super(props);
   }
 
+  _onRepoPress(repo) {
+    Actions.webPage({
+      url: repo.html_url || repo.htmlUrl,
+      title: repo.full_name || repo.fullName}
+    );
+  }
+
+  _onOwnerPress(owner) {
+    Actions.webPage({
+      url: owner.html_url || owner.htmlUrl,
+      title: owner.login
+    });
+  }
+
   render() {
-    let {full_name, fullName, language, owner, stargazers_count, stargazersCount, forks_count, forksCount, description, watchers_count, watchersCount} = this.props.repo;
+    let {full_name, fullName, language, owner, stargazers_count, stargazersCount, forks_count, forksCount, description, watchers_count, watchersCount, html_url, htmlUrl} = this.props.repo;
     return (
       <View style={[styles.container, this.props.style]}>
         <View style={styles.left}>
-          <Avatar style={styles.avatar} url={owner.avatar_url || owner.avatarUrl} size={56} />
+          <Avatar style={styles.avatar} url={owner.avatar_url || owner.avatarUrl} size={56} onPress={() => this._onOwnerPress(owner)} />
         </View>
         <View style={styles.right}>
-        <Text style={styles.name}>{full_name || fullName}</Text>
+        <TouchableOpacity onPress={() => this._onRepoPress(this.props.repo)}>
+          <Text style={styles.name}>{full_name || fullName}</Text>
+        </TouchableOpacity>
         <Text style={styles.language}>#{language}#</Text>
           <View style={styles.statistics}>
             <Icon style={styles.action} name="star" > {stargazers_count || stargazersCount}</Icon>

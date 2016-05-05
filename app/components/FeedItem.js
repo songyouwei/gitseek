@@ -10,6 +10,7 @@ import React, {
   Text,
   TouchableOpacity,
 }  from 'react-native';
+import {Actions} from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/Octicons';
 import Avatar from '../components/Avatar';
 import StatefulImage from '../components/StatefulImage';
@@ -128,6 +129,56 @@ export default class FeedItem extends Component {
     }
   }
 
+  _onActorPress(actor) {
+    Actions.webPage({
+      url: `https://github.com/${actor.login}`,
+      title: actor.login,
+    });
+  }
+
+  _onRepoPress(repo) {
+    Actions.webPage({
+      url: `https://github.com/${repo.name}`,
+      title: repo.name,
+    });
+  }
+
+  _onDetailPress(feed) {
+    switch (feed.type) {
+      case 'PushEvent':
+        Actions.webPage({
+          url: `https://github.com/${feed.repo.name}/commits/${feed.payload.head}`,
+          title: feed.repo.name,
+        });
+        break;
+      case 'IssuesEvent':
+        Actions.webPage({
+          url: feed.payload.issue.htmlUrl,
+          title: feed.repo.name,
+        });
+        break;
+      case 'IssueCommentEvent':
+      case 'PullRequestReviewCommentEvent':
+        Actions.webPage({
+          url: feed.payload.comment.htmlUrl,
+          title: feed.repo.name,
+        });
+        break;
+      case 'PullRequestEvent':
+        Actions.webPage({
+          url: feed.payload.PullRequest.htmlUrl,
+          title: feed.repo.name,
+        });
+        break;
+      default:
+        Actions.webPage({
+          url: `https://github.com/${feed.repo.name}`,
+          title: feed.repo.name,
+        });
+        break;
+    }
+  }
+
   render() {
     let feed = this.props.feed;
     let {id, actor, createdAt, payload, repo, type} = feed;
@@ -137,20 +188,24 @@ export default class FeedItem extends Component {
     return (
       <View style={[styles.container, this.props.style]}>
         <View style={styles.left}>
-          <Avatar style={styles.avatar} url={actor.avatarUrl} size={56} />
+          <Avatar style={styles.avatar} url={actor.avatarUrl} size={56} onPress={() => this._onActorPress(actor)} />
           <View style={styles.actionIcon}>
             <Icon name={this._getActionIconName(feed)} size={25} color="#666" />
           </View>
         </View>
         <View style={styles.right}>
-          <Text style={styles.login}>{actor.login}</Text>
+          <TouchableOpacity onPress={() => this._onActorPress(actor)}>
+            <Text style={styles.login}>{actor.login}</Text>
+          </TouchableOpacity>
           <Text style={styles.action}>{action}</Text>
-          <Text style={styles.repo}>{repo.name}</Text>
+          <TouchableOpacity onPress={() => this._onRepoPress(repo)}>
+            <Text style={styles.repo}>{repo.name}</Text>
+          </TouchableOpacity>
           {detail
             ?
-            <View style={styles.detailWrapper}>
+            <TouchableOpacity style={styles.detailWrapper} onPress={() => this._onDetailPress(feed)}>
               <Text style={styles.detail} numberOfLines={15}>{detail}</Text>
-            </View>
+            </TouchableOpacity>
             :
             null
           }

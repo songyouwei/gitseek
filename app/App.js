@@ -16,6 +16,7 @@ import HomeTabs from './pages/HomeTabs';
 import Search from './pages/Search';
 import Setting from './pages/Setting';
 import About from './pages/About';
+import WebPage from './pages/WebPage';
 
 export default class App extends Component {
   constructor(props) {
@@ -49,6 +50,7 @@ export default class App extends Component {
         <Route name="search" component={Search} />
         <Route name="setting" component={Setting} />
         <Route name="about" component={About} />
+        <Route name="webPage" component={WebPage} />
       </Router>
     );
   }
