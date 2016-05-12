@@ -1,21 +1,17 @@
-import React, {
-  PropTypes,
-  Component,
-  Dimensions,
-  Image,
-  InteractionManager,
-  Animated,
-  StyleSheet,
-  View,
-  Text,
-  Platform,
-  TouchableOpacity,
-}  from 'react-native';
+import React, {Component, PropTypes} from "react";
+import {Dimensions, Image, InteractionManager, Animated, StyleSheet, View, Text, Platform, TouchableOpacity} from "react-native";
 import {Actions} from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/Octicons';
 import config from '../config';
 
 export default class NavBar extends Component {
+
+  static propTypes = {
+    title: PropTypes.string,
+    hasLeftBackBtn: PropTypes.bool,
+    rightBtn: PropTypes.element,
+  };
+
   constructor(props) {
     super(props);
   }
@@ -30,19 +26,14 @@ export default class NavBar extends Component {
             <Icon style={{color: config.fontColor}} name="chevron-left" size={25} />
           </TouchableOpacity>:null}
         </View>
-        <View style={styles.title}><Text style={styles.titleTxt}>{title}</Text></View>
+        <View style={styles.title}><Text style={styles.titleTxt} numberOfLines={1}>{title}</Text></View>
         <View style={styles.right}>
           {rightBtn?rightBtn:null}
         </View>
       </View>
     );
   }
-};
-NavBar.propTypes = {
-  title: PropTypes.string,
-  hasLeftBackBtn: PropTypes.bool,
-  rightBtn: PropTypes.element,
-};
+}
 
 let styles = StyleSheet.create({
   header: {
@@ -54,12 +45,14 @@ let styles = StyleSheet.create({
     paddingTop: Platform.OS==='ios'?20:0,
   },
   left: {
+    flex: 1,
     flexDirection: 'row',
     marginLeft: 15,
     justifyContent: 'flex-start',
     alignItems: 'center',
   },
   title: {
+    flex: 8,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -69,6 +62,7 @@ let styles = StyleSheet.create({
     color: config.fontColor,
   },
   right: {
+    flex: 1,
     flexDirection: 'row',
     justifyContent: 'flex-end',
     alignItems: 'center',

@@ -1,15 +1,5 @@
-import React, {
-  PropTypes,
-  Component,
-  Dimensions,
-  Image,
-  InteractionManager,
-  Animated,
-  StyleSheet,
-  View,
-  Text,
-  Alert,
-}  from 'react-native';
+import React, {Component, PropTypes} from "react";
+import {Dimensions, Image, InteractionManager, Animated, StyleSheet, View, Text, Alert} from "react-native";
 import Api from '../Api';
 import SearchBarEditable from '../components/SearchBarEditable';
 import LoadingIndicator from '../components/LoadingIndicator';
@@ -18,6 +8,7 @@ import SearchResults from '../components/SearchResults';
 import config from '../config';
 
 export default class Search extends Component {
+
   constructor(props) {
     super(props);
     this.onSearch = this.onSearch.bind(this);
@@ -56,11 +47,7 @@ export default class Search extends Component {
       </View>
     );
   }
-};
-Search.propTypes = {
-  loading: PropTypes.bool,
-  results: PropTypes.object,
-};
+}
 
 let styles = StyleSheet.create({
   container: {

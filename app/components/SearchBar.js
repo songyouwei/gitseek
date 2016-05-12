@@ -1,34 +1,27 @@
-import React, {
-  PropTypes,
-  Component,
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  Dimensions,
-  TouchableOpacity,
-  Platform,
-} from 'react-native';
+import React, {Component, PropTypes} from "react";
+import {StyleSheet, Text, View, Image, Dimensions, TouchableOpacity, Platform} from "react-native";
 import Icon from 'react-native-vector-icons/Octicons';
 import config from '../config';
 
 export default class SearchBar extends Component {
+
+  static propTypes = {
+  	onPress: PropTypes.func,
+  };
+
   render() {
     return (
   		<View style={[styles.container, this.props.style]}>
         <TouchableOpacity onPress={this.props.onPress}>
           <View style={styles.search}>
-            <Icon style={styles.searchIcon} name="search" size={17} color="#000" />
+            <Icon style={styles.searchIcon} name="search" size={17} color={config.iconColor} />
             <Text style={styles.tintText}>search repos</Text>
           </View>
         </TouchableOpacity>
       </View>
     );
   }
-};
-SearchBar.propTypes = {
-	onPress: PropTypes.func,
-};
+}
 
 let styles = StyleSheet.create({
   container: {
@@ -53,5 +46,6 @@ let styles = StyleSheet.create({
   tintText: {
   	textAlign: "center",
   	fontSize: 15,
+    color: config.iconColor,
   },
 });

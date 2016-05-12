@@ -1,16 +1,5 @@
-import React, {
-  PropTypes,
-  Component,
-  Dimensions,
-  Image,
-  InteractionManager,
-  Animated,
-  StyleSheet,
-  View,
-  Text,
-  Platform,
-  TouchableOpacity,
-}  from 'react-native';
+import React, {Component, PropTypes} from "react";
+import {Dimensions, Image, InteractionManager, Animated, StyleSheet, View, Text, Platform, TouchableOpacity} from "react-native";
 import Icon from 'react-native-vector-icons/Octicons';
 import config from '../config';
 
@@ -38,7 +27,7 @@ export default class NavListItem extends Component {
       </TouchableOpacity>
     );
   }
-};
+}
 
 let styles = StyleSheet.create({
   container: {

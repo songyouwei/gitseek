@@ -1,10 +1,5 @@
-import React, {
-  PropTypes,
-  Component,
-  ProgressBarAndroid,
-  ActivityIndicatorIOS,
-  Platform,
-}  from 'react-native';
+import React, {Component, PropTypes} from "react";
+import {ProgressBarAndroid, ActivityIndicatorIOS, Platform} from "react-native";
 import config from '../config';
 
 export default class LoadingIndicator extends Component {
@@ -33,4 +28,4 @@ export default class LoadingIndicator extends Component {
       return <ProgressBarAndroid style={this.props.style} styleAttr={androidSize} />;
     }
   }
-};
+}

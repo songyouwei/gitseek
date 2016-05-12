@@ -1,14 +1,5 @@
-import React, {
-  PropTypes,
-  Component,
-  StyleSheet,
-  BackAndroid,
-  ToastAndroid,
-  StatusBar,
-  Navigator,
-  Platform,
-  Text,
-} from 'react-native';
+import React, {Component, PropTypes} from "react";
+import {StyleSheet, BackAndroid, ToastAndroid, StatusBar, Navigator, Platform, Text} from "react-native";
 import {Actions, Schema, Route, Router} from 'react-native-router-flux';
 import Api from './Api';
 import ErrorView from './components/ErrorView';
@@ -25,17 +16,7 @@ export default class App extends Component {
       StatusBar.setHidden(false);
       // StatusBar.setBarStyle('light-content', true);
     } else {
-      BackAndroid.addEventListener('hardwareBackPress', ()=>{
-        try {
-          if (Actions.pop() != null) {
-            return true;
-          } else {
-            return false;
-          }
-        } catch (e) {
-          return false;
-        }
-      });
+      BackAndroid.addEventListener('hardwareBackPress', () => Actions.pop());
     }
     Api.init();
   }
@@ -54,4 +35,4 @@ export default class App extends Component {
       </Router>
     );
   }
-};
+}

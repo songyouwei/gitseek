@@ -1,17 +1,5 @@
-import React, {
-  PropTypes,
-  Component,
-  Dimensions,
-  Image,
-  InteractionManager,
-  Animated,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  TouchableOpacity,
-  Alert,
-}  from 'react-native';
+import React, {Component, PropTypes} from "react";
+import {Dimensions, Image, InteractionManager, Animated, StyleSheet, ScrollView, View, Text, TouchableOpacity, Alert} from "react-native";
 import {Actions} from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/Octicons';
 import Api from '../Api';
@@ -71,7 +59,7 @@ export default class Setting extends Component {
       </View>
     );
   }
-};
+}
 
 let styles = StyleSheet.create({
   container: {

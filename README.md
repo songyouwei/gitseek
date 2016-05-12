@@ -1,4 +1,5 @@
-## GitSeek
+![](./logo.png)
+
 A Github app powered by React Native, written in ES6
 
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://github.com/feross/standard)

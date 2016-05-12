@@ -1,17 +1,5 @@
-import React, {
-  PropTypes,
-  Component,
-  Dimensions,
-  Image,
-  InteractionManager,
-  Animated,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  RefreshControl,
-  WebView,
-}  from 'react-native';
+import React, {Component, PropTypes} from "react";
+import {Dimensions, Image, InteractionManager, Animated, StyleSheet, ScrollView, View, Text, RefreshControl, WebView} from "react-native";
 import {Actions} from 'react-native-router-flux';
 import ErrorView from '../components/ErrorView';
 import LoadingIndicator from '../components/LoadingIndicator';
@@ -19,6 +7,11 @@ import NavBar from '../components/NavBar';
 import config from '../config';
 
 export default class WebPage extends Component {
+
+  static propTypes = {
+    title: PropTypes.string,
+    url: PropTypes.string,
+  };
 
   constructor(props) {
     super(props);
@@ -41,7 +34,8 @@ export default class WebPage extends Component {
           styles={{flex: 1}}
           source={{uri: url}}
           automaticallyAdjustContentInsets={false}
-          contentInset={{top: 0, left: 0, bottom: 49, right: 0}}
+          contentInset={{top: -45, left: 0, bottom: -60, right: 0}}
+          bounces={false}
           renderLoading={() => <LoadingIndicator style={styles.tip} /> }
           renderError={() => <ErrorView style={styles.tip} /> }
           javaScriptEnabled={true}
@@ -49,7 +43,7 @@ export default class WebPage extends Component {
       </View>
     );
   }
-};
+}
 
 let styles = StyleSheet.create({
   container: {

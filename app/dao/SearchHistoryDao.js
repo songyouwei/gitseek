@@ -1,6 +1,5 @@
-import React, {
-  AsyncStorage,
-}  from 'react-native';
+import React from "react";
+import {AsyncStorage} from "react-native";
 
 const STORAGE_KEY_SEARCH_HISTORY = "STORAGE_KEY_SEARCH_HISTORY";
 
@@ -42,4 +41,4 @@ export default class SearchHistoryDao {
       });
     });
   }
-};
+}

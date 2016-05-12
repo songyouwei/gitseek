@@ -1,12 +1,12 @@
-import React, {
-  PropTypes,
-  Component,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import React, {Component, PropTypes} from "react";
+import {StyleSheet, Text, View} from "react-native";
 
 export default class ErrorView extends Component {
+
+  static propTypes = {
+    msg: PropTypes.any,
+  };
+
   render() {
     let {msg, msgStyle} = this.props;
     let defaultErr = "oops, fetch failed!";
@@ -22,11 +22,7 @@ export default class ErrorView extends Component {
     	</View>
     );
   }
-};
-ErrorView.propTypes = {
-  msg: PropTypes.any,
-  style: PropTypes.object,
-};
+}
 
 let styles = StyleSheet.create({
   container: {

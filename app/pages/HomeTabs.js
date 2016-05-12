@@ -1,22 +1,12 @@
-import React, {
-  PropTypes,
-  Component,
-  Dimensions,
-  Image,
-  InteractionManager,
-  Animated,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-}  from 'react-native';
+import React, {Component, PropTypes} from "react";
+import {Dimensions, Image, InteractionManager, Animated, StyleSheet, ScrollView, View, Text} from "react-native";
 import {Actions} from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/Octicons';
 import Api from '../Api';
 import TabNavigator from 'react-native-tab-navigator';
 import Home from './Home';
 import Trends from './Trends';
-import My from './My';
+import User from './User';
 import config from '../config';
 
 export default class HomeTabs extends Component {
@@ -51,12 +41,12 @@ export default class HomeTabs extends Component {
             // else
               this.setState({ selectedTab: 'my' });
           }}>
-          <My />
+          <User />
         </TabNavigator.Item>
       </TabNavigator>
     );
   }
-};
+}
 
 let styles = StyleSheet.create({
   tabbar: {

@@ -1,15 +1,5 @@
-import React, {
-  PropTypes,
-  Component,
-  Dimensions,
-  Image,
-  InteractionManager,
-  Animated,
-  StyleSheet,
-  View,
-  Text,
-  TouchableOpacity,
-}  from 'react-native';
+import React, {Component, PropTypes} from "react";
+import {Dimensions, Image, InteractionManager, Animated, StyleSheet, View, Text, TouchableOpacity} from "react-native";
 import {Actions} from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/Octicons';
 import Avatar from '../components/Avatar';
@@ -62,7 +52,7 @@ export default class RepoItem extends Component {
     );
   }
 
-};
+}
 
 let styles = StyleSheet.create({
   container: {

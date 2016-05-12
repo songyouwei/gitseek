@@ -1,17 +1,5 @@
-import React, {
-  PropTypes,
-  Component,
-  Dimensions,
-  Platform,
-  TouchableOpacity,
-  Image,
-  InteractionManager,
-  Animated,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-}  from 'react-native';
+import React, {Component, PropTypes} from "react";
+import {Dimensions, Platform, TouchableOpacity, Image, InteractionManager, Animated, StyleSheet, ScrollView, View, Text} from "react-native";
 import {Actions} from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/Octicons';
 import Api from '../Api';
@@ -19,29 +7,29 @@ import Avatar from '../components/Avatar';
 import LoadingIndicator from '../components/LoadingIndicator';
 import NavListItem from '../components/NavListItem';
 import RepoItem from '../components/RepoItem';
+import XListView from '../components/XListView';
 import config from '../config';
 
-export default class My extends Component {
+export default class User extends Component {
+
+  static propTypes = {
+    user: PropTypes.object,
+  };
 
   constructor(props) {
     super(props);
-    this.onSettingPressed = this.onSettingPressed.bind(this);
+    this._renderUserRepo = this._renderUserRepo.bind(this);
+    this._onSettingPressed = this._onSettingPressed.bind(this);
     this.state = {
-      user: {},
+      user: this.props.user || {},
       starsCount: null,
-      repos: [],
     };
   }
 
   componentWillMount() {
-    Api.getLoggedUser().then(user => {
+    Api.getUser().then(user => {
       this.setState({
         user: user,
-      });
-    });
-    Api.getUserRepos().then(repos => {
-      this.setState({
-        repos: repos,
       });
     });
     Api.getUserStarsCount().then(starsCount => {
@@ -51,20 +39,21 @@ export default class My extends Component {
     });
   }
 
+  _onSettingPressed() {
+    Actions.setting();
+  }
+
+  _renderUserRepo(repo) {
+    return <RepoItem repo={repo} />;
+  }
+
   render() {
     let {name, login, blog, email, avatar_url, followers, following} = this.state.user;
     let {starsCount} = this.state;
-    let repos = this.state.repos;
-    let items = [];
-    repos && repos instanceof Array && repos.map(repo => {
-      items.push(
-        <RepoItem repo={repo} key={repo.id} />
-      );
-    });
     return (
       <ScrollView style={styles.container} >
         <View style={styles.briefInfo} >
-          <TouchableOpacity style={styles.settingWrapper} onPress={this.onSettingPressed} >
+          <TouchableOpacity style={styles.settingWrapper} onPress={this._onSettingPressed} >
             <Icon name="gear" size={25} color="#666" />
           </TouchableOpacity>
           <Avatar url={avatar_url} size={91} />
@@ -86,21 +75,15 @@ export default class My extends Component {
             <Text style={styles.statNameText}>Following</Text>
           </View>
         </View>
-        <ScrollView style={styles.repos} >
-          {items}
-        </ScrollView>
+        <XListView
+          style={styles.repos}
+          onFetch={Api.getUserRepos}
+          renderRow={this._renderUserRepo}
+        />
       </ScrollView>
     );
   }
-
-  onSettingPressed() {
-    Actions.setting();
-  }
-};
-My.propTypes = {
-  loading: PropTypes.bool,
-  data: PropTypes.object,
-};
+}
 
 let styles = StyleSheet.create({
   container: {

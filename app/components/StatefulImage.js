@@ -1,13 +1,13 @@
-import React, {
-  PropTypes,
-  Component,
-  Image,
-  StyleSheet,
-  View,
-}  from 'react-native';
+import React, {Component, PropTypes} from "react";
+import {Image, StyleSheet, View} from "react-native";
 import LoadingIndicator from '../components/LoadingIndicator';
 
 export default class StatefulImage extends Component {
+
+  static propTypes = {
+    source: PropTypes.any,
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -35,8 +35,4 @@ export default class StatefulImage extends Component {
       </Image>
     );
   }
-};
-StatefulImage.propTypes = {
-  source: PropTypes.any,
-  // noCache: PropTypes.bool,
-};
+}

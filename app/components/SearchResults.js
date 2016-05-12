@@ -1,21 +1,14 @@
-import React, {
-  PropTypes,
-  Component,
-  Dimensions,
-  TouchableOpacity,
-  Image,
-  InteractionManager,
-  Animated,
-  StyleSheet,
-  View,
-  ScrollView,
-  Text,
-  Platform,
-}  from 'react-native';
+import React, {Component, PropTypes} from "react";
+import {Dimensions, TouchableOpacity, Image, InteractionManager, Animated, StyleSheet, View, ScrollView, Text, Platform} from "react-native";
 import {Actions} from 'react-native-router-flux';
 import RepoItem from './RepoItem';
 
 export default class SearchResults extends Component {
+
+  static propTypes = {
+    results: PropTypes.any.isRequired,
+  };
+
   constructor(props) {
     super(props);
   }
@@ -43,10 +36,7 @@ export default class SearchResults extends Component {
       );
     }
   }
-};
-SearchResults.propTypes = {
-  results: PropTypes.any,
-};
+}
 
 let styles = StyleSheet.create({
   scrollView: {

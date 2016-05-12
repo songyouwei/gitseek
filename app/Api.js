@@ -49,13 +49,12 @@ export default class Api {
     });
   }
 
-  static getLoggedUser(): Promise<User> {
+  static getUser(userLogin = AppState.account.login : stirng): Promise<User> {
     return new Promise((resolve, reject) => {
-      AppState.user && resolve(AppState.user)
-      ||
-      Api.octo.users(AppState.account.login).read().then(res => {
+      if(userLogin === AppState.account.login && AppState.user) resolve(AppState.user);
+      else Api.octo.users(userLogin).read().then(res => {
         resolve(JSON.parse(res));
-      }, err => reject(err))
+      }, err => reject(err));
     });
   }
 

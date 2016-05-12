@@ -4,7 +4,7 @@ export default config = {
   scopes: ['public_repo', 'user', 'notifications'],
   userAgent: 'GitSeek',
 
-  iconColor: '#bbb',
+  iconColor: '#666',
   themeColor: '#1d9dea',
   barColor: '#fff',
   fontColor: '#000',
@@ -12,5 +12,5 @@ export default config = {
   darkerBackgroundColor: '#dbdbdb',
   linkColor: '#1d9dea',
 
-  pageSize: 30,
+  pageSize: 5,
 };

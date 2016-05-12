@@ -1,6 +1,5 @@
-import React, {
-  AsyncStorage,
-}  from 'react-native';
+import React from "react";
+import {AsyncStorage} from "react-native";
 
 const STORAGE_KEY_ACCOUNT = "STORAGE_KEY_ACCOUNT";
 
@@ -32,4 +31,4 @@ export default class AccountDao {
       });
     });
   }
-};
+}

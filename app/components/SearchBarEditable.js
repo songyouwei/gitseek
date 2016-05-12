@@ -1,15 +1,5 @@
-import React, {
-  PropTypes,
-  Component,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-  Image,
-  Dimensions,
-  TouchableOpacity,
-  Platform,
-} from 'react-native';
+import React, {Component, PropTypes} from "react";
+import {StyleSheet, Text, TextInput, View, Image, Dimensions, TouchableOpacity, Platform} from "react-native";
 import {Actions} from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/Octicons';
 import Api from '../Api';
@@ -77,6 +67,11 @@ const styles = StyleSheet.create({
 });
 
 export default class SearchBarEditable extends Component {
+
+  static propTypes = {
+  	onSearch: PropTypes.func,
+  };
+  
   constructor(props) {
     super(props);
     this.onCancel = this.onCancel.bind(this);
@@ -170,7 +165,4 @@ export default class SearchBarEditable extends Component {
       </View>
     );
   }
-};
-SearchBarEditable.propTypes = {
-	onSearch: PropTypes.func,
-};
+}

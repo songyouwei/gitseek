@@ -1,16 +1,5 @@
-import React, {
-  PropTypes,
-  Component,
-  Dimensions,
-  TouchableOpacity,
-  Image,
-  InteractionManager,
-  Animated,
-  StyleSheet,
-  View,
-  Text,
-  Platform,
-}  from 'react-native';
+import React, {Component, PropTypes} from "react";
+import {Dimensions, TouchableOpacity, Image, InteractionManager, Animated, StyleSheet, View, Text, Platform} from "react-native";
 import StatefulImage from './StatefulImage';
 
 export default class Avatar extends Component {
@@ -41,7 +30,7 @@ export default class Avatar extends Component {
       </View>
     );
   }
-};
+}
 
 let styles = StyleSheet.create({
   avatorImg: {

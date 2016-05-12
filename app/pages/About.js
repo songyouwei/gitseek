@@ -1,17 +1,5 @@
-import React, {
-  PropTypes,
-  Component,
-  Dimensions,
-  Image,
-  InteractionManager,
-  Animated,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-}  from 'react-native';
+import React, {Component, PropTypes} from "react";
+import {Dimensions, Image, InteractionManager, Animated, StyleSheet, ScrollView, View, Text, TextInput, TouchableOpacity} from "react-native";
 import {Actions} from 'react-native-router-flux';
 import NavBar from '../components/NavBar';
 import config from '../config';
@@ -37,7 +25,7 @@ export default class About extends Component {
       </View>
     );
   }
-};
+}
 
 let styles = StyleSheet.create({
   container: {
