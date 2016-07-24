@@ -20,12 +20,12 @@ export default class Avatar extends Component {
       />
     );
     if (onPress) return (
-      <TouchableOpacity style={this.props.style} onPress={onPress} >
+      <TouchableOpacity style={[styles.container, this.props.style]} onPress={onPress} >
         {image}
       </TouchableOpacity>
     );
     else return (
-      <View style={this.props.style} >
+      <View style={[styles.container, this.props.style]} >
         {image}
       </View>
     );
@@ -33,12 +33,15 @@ export default class Avatar extends Component {
 }
 
 let styles = StyleSheet.create({
+  container: {
+    backgroundColor: 'transparent',
+  },
   avatorImg: {
     width: 36,
     height: 36,
     borderRadius: 18,
     borderWidth: 1.5,
     borderColor: '#ccc',
-    backgroundColor: '#fff',
+    backgroundColor: 'transparent',
   },
 });

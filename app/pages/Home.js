@@ -25,7 +25,7 @@ export default class Home extends Component {
       <View style={styles.container}>
         <SearchBar onPress={()=>Actions.search()} />
         <XListView
-          onFetch={Api.getFeeds}
+          onFetch={{func: Api.getFeeds}}
           renderRow={this._renderRow}
         />
       </View>

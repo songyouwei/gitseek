@@ -1,11 +1,14 @@
-import React, {Component, PropTypes} from "react";
-import {ProgressBarAndroid, ActivityIndicatorIOS, Platform} from "react-native";
-import config from '../config';
+import React, {
+  PropTypes,
+  Component,
+  ProgressBarAndroid,
+  ActivityIndicatorIOS,
+  Platform,
+} from 'react-native';
 
 export default class LoadingIndicator extends Component {
-
   static propTypes = {
-    size: PropTypes.oneOf(['small','large']),
+    size: PropTypes.oneOf(['small', 'large']),
   };
 
   static defaultProps = {
@@ -13,7 +16,7 @@ export default class LoadingIndicator extends Component {
   };
 
   render() {
-    let {size} = this.props;
+    const { size } = this.props;
     let androidSize;
     switch (size) {
       case 'small':
@@ -24,8 +27,7 @@ export default class LoadingIndicator extends Component {
     }
     if (Platform.OS === 'ios') {
       return <ActivityIndicatorIOS style={this.props.style} size={size} />;
-    } else {
-      return <ProgressBarAndroid style={this.props.style} styleAttr={androidSize} />;
     }
+    return <ProgressBarAndroid style={this.props.style} styleAttr={androidSize} />;
   }
 }

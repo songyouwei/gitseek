@@ -13,19 +13,13 @@ export default class HomeTabs extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedTab: 'home',
+      selectedTab: 'trends',
     };
   }
 
   render() {
     return (
-      <TabNavigator tabBarStyle={styles.tabbar} >
-        <TabNavigator.Item
-          selected={this.state.selectedTab === 'home'}
-          renderIcon={(selected) => <Icon name="home" size={25} color={selected?config.themeColor:config.iconColor} />}
-          onPress={() => this.setState({ selectedTab: 'home' })}>
-          <Home />
-        </TabNavigator.Item>
+      <TabNavigator tabBarStyle={styles.tabbar}>
         <TabNavigator.Item
           selected={this.state.selectedTab === 'trends'}
           renderIcon={(selected) => <Icon name="flame" size={25} color={selected?config.themeColor:config.iconColor} />}
@@ -33,13 +27,20 @@ export default class HomeTabs extends Component {
           <Trends />
         </TabNavigator.Item>
         <TabNavigator.Item
+          selected={this.state.selectedTab === 'home'}
+          renderIcon={(selected) => <Icon name="rss" size={25} color={selected?config.themeColor:config.iconColor} />}
+          onPress={() => {
+            if (Api.logined()) this.setState({ selectedTab: 'home' });
+            else Actions.login();
+          }}>
+          <Home />
+        </TabNavigator.Item>
+        <TabNavigator.Item
           selected={this.state.selectedTab === 'my'}
           renderIcon={(selected) => <Icon name="mark-github" size={25} color={selected?config.themeColor:config.iconColor} />}
           onPress={() => {
-            // if(!Api.logined())
-            //   Actions.login();
-            // else
-              this.setState({ selectedTab: 'my' });
+            if (Api.logined()) this.setState({ selectedTab: 'my' });
+            else Actions.login();
           }}>
           <User />
         </TabNavigator.Item>
@@ -54,6 +55,6 @@ let styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: config.barColor,
-  },
+    backgroundColor: config.barColor
+  }
 });

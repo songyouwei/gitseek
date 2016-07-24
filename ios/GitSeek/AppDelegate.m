@@ -30,11 +30,9 @@
    * `inet` value under `en0:`) and make sure your computer and iOS device are
    * on the same Wi-Fi network.
    */
-
-//  jsCodeLocation = [NSURL URLWithString:@"http://localhost:8081/index.ios.bundle?platform=ios&dev=true"];
-//  jsCodeLocation = [NSURL URLWithString:@"http://192.168.0.106:8081/index.ios.bundle?platform=ios&dev=true"];
-  jsCodeLocation = [NSURL URLWithString:@"http://192.168.1.107:8081/index.ios.bundle?platform=ios&dev=true"];
-
+#if TARGET_IPHONE_SIMULATOR
+  jsCodeLocation = [NSURL URLWithString:@"http://localhost:8081/index.ios.bundle?platform=ios&dev=true"];
+  
   /**
    * OPTION 2
    * Load from pre-bundled file on disk. The static bundle is automatically
@@ -42,9 +40,13 @@
    * running the project on an actual device or running the project on the
    * simulator in the "Release" build configuration.
    */
-
-//   jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
-
+#else
+  // jsCodeLocation = [NSURL URLWithString:@"http://192.168.2.104:8081/index.ios.bundle?platform=ios&dev=true"];
+  jsCodeLocation = [NSURL URLWithString:@"http://192.168.1.100:8081/index.ios.bundle?platform=ios&dev=true"];
+//  jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
+  // jsCodeLocation = [CodePush bundleURL];
+#endif
+  
   RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
                                                       moduleName:@"GitSeek"
                                                initialProperties:nil

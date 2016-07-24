@@ -37,7 +37,7 @@ export default class FeedItem extends Component {
     } else if (feed.type === 'DeleteEvent') {
       name = 'x';
     } else if (feed.type === 'CreateEvent') {
-      name = 'tag';
+      name = 'repo-push';
     }
     return name;
   }
@@ -68,7 +68,7 @@ export default class FeedItem extends Component {
     } else if (feed.type === 'DeleteEvent') {
       action = 'deleted ' + feed.payload.refType + ' "' + feed.payload.ref + '" at';
     } else if (feed.type === 'CreateEvent') {
-      action = 'created ' + feed.payload.refType + ' "' + feed.payload.ref + '" at';
+      action = 'created ' + feed.payload.refType + (feed.payload.ref ? ' "' + feed.payload.ref + '" at' : '');
     }
     return action;
   }
@@ -120,16 +120,14 @@ export default class FeedItem extends Component {
   }
 
   _onActorPress(actor) {
-    Actions.webPage({
-      url: `https://github.com/${actor.login}`,
-      title: actor.login,
-    });
+    Actions.user({user: actor});
   }
 
   _onRepoPress(repo) {
     Actions.webPage({
-      url: `https://github.com/${repo.name}`,
+      url: `https://github.com/${repo.name}/blob/master/README.md`,
       title: repo.name,
+      repo: repo,
     });
   }
 
@@ -162,7 +160,7 @@ export default class FeedItem extends Component {
         break;
       default:
         Actions.webPage({
-          url: `https://github.com/${feed.repo.name}`,
+          url: `https://github.com/${feed.repo.name}/blob/master/README.md`,
           title: feed.repo.name,
         });
         break;
@@ -214,12 +212,11 @@ let styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     borderColor: '#ccc',
-    marginTop: 35,
+    marginTop: 20,
     backgroundColor: '#fafafa',
   },
   left: {
-    position: 'absolute',
-    top: -28,
+    padding: 5,
   },
   avatar: {
   },
@@ -229,7 +226,7 @@ let styles = StyleSheet.create({
   },
   right: {
     flex: 1,
-    marginLeft: 55,
+    marginLeft: 10,
   },
   login: {
     color: config.linkColor,
@@ -240,7 +237,7 @@ let styles = StyleSheet.create({
     fontWeight: '400',
     marginTop: 5,
     fontSize: 13,
-    color: 'grey'
+    color: 'grey',
   },
   repo: {
     color: config.linkColor,

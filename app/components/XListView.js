@@ -2,10 +2,14 @@ import React, {Component, PropTypes} from "react";
 import {StyleSheet, Text, View, ListView, RefreshControl} from "react-native";
 import ErrorView from '../components/ErrorView';
 
+const NOMORE = 'no more';
+const LOADING = 'loading...';
 export default class XListView extends Component {
-
   static propTypes = {
-    onFetch: PropTypes.func.isRequired,//a function that returns a Promise<Rows>
+    onFetch: PropTypes.shape({
+      func: PropTypes.func.isRequired,
+      args: PropTypes.arrayOf(PropTypes.string),
+    }).isRequired,//a function that returns a Promise<Rows>
     renderRow: PropTypes.func.isRequired,
   };
 
@@ -16,7 +20,6 @@ export default class XListView extends Component {
     this._onFetch = this._onFetch.bind(this);
     this._renderHeader = this._renderHeader.bind(this);
     this._renderFooter = this._renderFooter.bind(this);
-    this._setRows([]);
     this.state = {
       isLoading: false,
       isRefreshing: false,
@@ -29,7 +32,7 @@ export default class XListView extends Component {
   }
 
   _setRows(rows) { this._rows = rows; }
-  _getRows() { return this._rows; }
+  _getRows() { return this._rows || []; }
 
   componentDidMount() {
     this._onFetch();
@@ -37,7 +40,7 @@ export default class XListView extends Component {
 
   _renderHeader() {
     let {err} = this.state;
-    if (err && this._getRows().length === 0)
+    if (err && err !== NOMORE)
       return (
         <ErrorView style={styles.header} msg={err} />
       );
@@ -49,21 +52,22 @@ export default class XListView extends Component {
       return (
         <View style={styles.loadMore}>
           <Text style={styles.loadMoreText} >
-            {err || 'loading...'}
+            {err || LOADING}
           </Text>
         </View>
       );
-    else return null;
   }
 
   prevFetchPromise = null;
   _onFetch(more = false) {
-    let fetchPromise = !more ? this.props.onFetch : this.state.nextPage;
-    if (fetchPromise === this.prevFetchPromise) return;
-    else this.prevFetchPromise = fetchPromise;
+    let fetchPromise = !more ? this.props.onFetch.func : this.state.nextPage;
+    if(more) {
+      if (fetchPromise === this.prevFetchPromise) return;
+      else this.prevFetchPromise = fetchPromise;
+    }
     if (!fetchPromise) {
       this.setState({
-        err: 'no more',
+        err: NOMORE,
       });
       return;
     }
@@ -71,7 +75,8 @@ export default class XListView extends Component {
       isLoading: more,
       isRefreshing: !more,
     });
-    fetchPromise().then(rows => {
+    let args = this.props.onFetch.args || [];
+    fetchPromise(...args).then(rows => {
       if(rows instanceof Array) {
         let newRows = !more ? [].concat(rows) : this._getRows().concat(rows);
         this._setRows(newRows);
@@ -80,6 +85,7 @@ export default class XListView extends Component {
           isRefreshing: false,
           dataSource: this.state.dataSource.cloneWithRows(newRows),
           nextPage: rows.nextPage,
+          err: null,
         });
       }
     }, err => {
@@ -99,12 +105,13 @@ export default class XListView extends Component {
         style={[styles.scrollView, this.props.style]}
         dataSource={dataSource}
         enableEmptySections={true}
-        removeClippedSubviews={true}
+        removeClippedSubviews={false}
         onEndReached={() => this._onFetch(true)}
         renderRow={renderRow}
         renderHeader={this._renderHeader}
         renderFooter={this._renderFooter}
         scrollRenderAheadDistance={50}
+        automaticallyAdjustContentInsets={false}
         refreshControl={
           <RefreshControl
             refreshing={isRefreshing}

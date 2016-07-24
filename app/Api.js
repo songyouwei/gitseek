@@ -1,58 +1,75 @@
+import {AsyncStorage} from "react-native";
 import {Actions} from 'react-native-router-flux';
 import Octokat from 'octokat';
+import base64 from 'base-64';
 import EventEmitter from 'EventEmitter';
-import AccountDao from './dao/AccountDao';
 import SearchHistoryDao from './dao/SearchHistoryDao';
 import CacheDao from './dao/CacheDao';
+import config from './config';
+
+const STORAGE_KEY_ACCOUNT = "STORAGE_KEY_ACCOUNT";
 
 const AppState = {
-  logined: false,
-  // account: null,
-  account: {
-    login: 'songyouwei',
-    password: 'syw05535812531',
-  },
-  user: null,
+  account: null,
 };
+let octo = new Octokat();
 export default class Api {
 
-  static octo = new Octokat();
-
   static init(): void {
-    AccountDao.get().then(account => {
-      AppState.account = account;
-      if(account.login && account.password) Api.octo = new Octokat({
-        login: account.login,
-        password: account.password,
-      });
+    Api.getLocalAccount().then(account => {
+      if (account && account.login && account.password) {
+        AppState.account = account;
+        octo = new Octokat({
+          username: account.login,
+          password: account.password,
+        });
+      }
     });
   }
 
-  static logined(): Promise<boolean> {
-    return new Promise((resolve, reject) => {
-      if (AppState.account) resolve(true);
-      else AccountDao.get().then(res => resolve(true), err => resolve(false));
-    });
+  static logined() {
+    return !!AppState.account;
   }
 
   static login(login: String, password: String): Promise<boolean> {
-    AppState.account = {
-      login: login,
-      password: password,
-    };
+    return new Promise((resolve, reject) => {
+      const tempOcto = new Octokat({
+        username: login,
+        password: password,
+      });
+      tempOcto.me.fetch().then(
+        user => {
+          user['password'] = password;
+          AppState.account = user;
+          AsyncStorage.setItem(STORAGE_KEY_ACCOUNT, JSON.stringify(user));
+          octo = tempOcto;
+          resolve(user);
+        },
+        err => {
+          reject(err.json.message);
+        }
+      );
+    });
   }
 
   static logout(): Promise<boolean> {
+    AppState.account = null;
+    AsyncStorage.removeItem(STORAGE_KEY_ACCOUNT);
+    octo = new Octokat();
+  }
+
+  static getLocalAccount(): Promise {
     return new Promise((resolve, reject) => {
       if (AppState.account) resolve(AppState.account);
-      else AccountDao.get().then(res => resolve(true), err => resolve(false));
+      else AsyncStorage.getItem(STORAGE_KEY_ACCOUNT).then(account => {
+        AppState.account = JSON.parse(account);
+      });
     });
   }
 
   static getUser(userLogin = AppState.account.login : stirng): Promise<User> {
     return new Promise((resolve, reject) => {
-      if(userLogin === AppState.account.login && AppState.user) resolve(AppState.user);
-      else Api.octo.users(userLogin).read().then(res => {
+      octo.users(userLogin).read().then(res => {
         resolve(JSON.parse(res));
       }, err => reject(err));
     });
@@ -60,7 +77,7 @@ export default class Api {
 
   static getUserStarsCount(userLogin = AppState.account.login : string): Promise<number> {
     return new Promise((resolve, reject) => {
-      Api.octo.users(userLogin).starred.fetch({per_page: 1}).then(res => {
+      octo.users(userLogin).starred.fetch({per_page: 1}).then(res => {
         let splitted = res.lastPageUrl && res.lastPageUrl.split('=');
         let starsCount = splitted?splitted[splitted.length-1]:0;
         resolve(starsCount);
@@ -69,45 +86,40 @@ export default class Api {
   }
 
   static getUserRepos(userLogin = AppState.account.login : string): Promise<RepoItem[]> {
-    return Api.octo.users(userLogin).repos.fetch({sort: 'stars'});
+    return octo.users(userLogin).repos.fetch({sort: 'stars'});
   }
 
   static getFeeds(): Promise<Feed[]> {
     if(AppState.account && AppState.account.login)
-      return Api.octo.users(AppState.account.login).receivedEvents.fetch({per_page: config.pageSize});
+      return octo.users(AppState.account.login).receivedEvents.fetch({per_page: config.pageSize});
     else return new Promise(function(resolve, reject) {
       reject("account is null");
     });
   }
 
   static getTrends(language: string): Promise<SearchResult> {
-    // let current = new Date();
-    // let lengthOfADay = 86400000;//1000*60*60*24
-    // let lastDay = new Date(current.valueOf() - lengthOfADay);
-    // let lastWeek = new Date(current.valueOf() - lengthOfADay*7);
-    // let lastMonth = new Date(current.valueOf() - lengthOfADay*30);
-    //
-    // let queryDate = lastWeek.toISOString();
-    // language = language? 'language:'+language : undefined;
-    // let pushed = 'pushed:>' + queryDate;
-    //
-    // let q = pushed + ' ' + language;
-    // return Api.octo.search.repositories.fetch({per_page: config.pageSize, sort: 'stars', q: q});
-
     let url = 'http://trending.codehub-app.com/v2/trending' + '?since=daily&language=' + language;
+    return octo.fromUrl(url).fetch();
+  }
+
+  static getRoughTrends(language: string): Promise<SearchResult> {
     return new Promise((resolve, reject) => {
-      fetch(url).then(res => {
-        if (res.status<200 && res.status>=300) reject('fetch error');
-	      return res.json();
+      let yesterday = new Date(new Date().getTime() - 1000 * 60 * 60 * 24).toISOString();
+      octo.search.repositories.fetch({
+        sort: 'stars',
+        page: 1,
+        q: `language:${language} pushed:>${yesterday}`,
       }).then(res => {
-        res instanceof Array && resolve(res);
-      });
+        res = res.items;
+        res['nextPage'] = res.nextPage;
+        resolve(res);
+      }, err => reject(err));
     });
   }
 
   static search(keyword: String): Promise<SearchResult> {
     SearchHistoryDao.add(keyword);
-    return Api.octo.search.repositories.fetch({per_page: config.pageSize, q: keyword});
+    return octo.search.repositories.fetch({per_page: config.pageSize, q: keyword});
   }
 
   static getSearchHistorys(): Promise<string[]> {
@@ -116,6 +128,30 @@ export default class Api {
 
   static clearSearchHistorys(): void {
     SearchHistoryDao.clear();
+  }
+
+  static getOrgaPeople(orga: Organizaiton): Promise<People[]> {
+    return octo.orgs(orga.login).members.fetch({per_page: config.pageSize});
+  }
+
+  static followed(userLogin = AppState.account.login : stirng): Promise<Boolean> {
+    return octo.me.following.contains(userLogin);
+  }
+
+  static follow(userLogin = AppState.account.login : stirng): Promise<Boolean> {
+    return octo.me.following(userLogin).add();
+  }
+
+  static unfollow(userLogin = AppState.account.login : stirng): Promise<Boolean> {
+    return octo.me.following(userLogin).remove();
+  }
+
+  static starRepo(repo : repo) : Promise<Boolean> {
+    return octo.me.starred(repo.owner.login, repo.name).add();
+  }
+
+  static unStarRepo(repo : repo) : Promise<Boolean> {
+    return octo.me.starred(repo.owner.login, repo.name).remove();
   }
 
   static getCacheSize(): Promise<string> {

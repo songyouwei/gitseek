@@ -6,7 +6,7 @@ import Avatar from '../components/Avatar';
 import StatefulImage from '../components/StatefulImage';
 import config from '../config';
 
-export default class RepoItem extends Component {
+export default class UserRepoItem extends Component {
   static propTypes = {
     repo: PropTypes.object.isRequired,
   };
@@ -17,22 +17,26 @@ export default class RepoItem extends Component {
 
   _onRepoPress(repo) {
     Actions.webPage({
-      url: `${repo.htmlUrl}/blob/master/README.md`,
-      title: repo.fullName,
-      repo: repo,
+      url: repo.htmlUrl,
+      title: repo.fullName
     });
   }
 
   _onOwnerPress(owner) {
-    Actions.user({user: owner});
+    Actions.webPage({
+      url: owner.htmlUrl,
+      title: owner.login
+    });
   }
 
   render() {
-    let {fullName, language, owner, stargazersCount, forksCount, description, watchersCount, htmlUrl} = this.props.repo;
+    let {fork, fullName, language, owner, stargazersCount, forksCount, description, watchersCount, htmlUrl} = this.props.repo;
     return (
       <View style={[styles.container, this.props.style]}>
         <View style={styles.left}>
-          <Avatar style={styles.avatar} url={owner.avatarUrl} size={56} onPress={() => this._onOwnerPress(owner)} />
+          <View style={styles.actionIcon}>
+            <Icon name={fork ? 'repo-forked' : 'repo'} size={25} color={config.iconColor} />
+          </View>
         </View>
         <View style={styles.right}>
         <TouchableOpacity onPress={() => this._onRepoPress(this.props.repo)}>
@@ -59,21 +63,19 @@ let styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     borderColor: '#ccc',
-    marginTop: 20,
+    marginTop: 15,
     backgroundColor: '#fafafa',
   },
   left: {
-    padding: 5,
-  },
-  avatar: {
+    width: 50,
+    alignItems: 'center',
   },
   actionIcon: {
-    marginTop: 5,
+    marginTop: 10,
     alignItems: 'center',
   },
   right: {
     flex: 1,
-    marginLeft: 10,
   },
   name: {
     color: config.linkColor,

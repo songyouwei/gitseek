@@ -26,7 +26,7 @@ export default class NavBar extends Component {
             <Icon style={{color: config.fontColor}} name="chevron-left" size={25} />
           </TouchableOpacity>:null}
         </View>
-        <View style={styles.title}><Text style={styles.titleTxt} numberOfLines={1}>{title}</Text></View>
+        <View style={styles.title}><Text style={styles.titleTxt} numberOfLines={2}>{title}</Text></View>
         <View style={styles.right}>
           {rightBtn?rightBtn:null}
         </View>
@@ -52,7 +52,7 @@ let styles = StyleSheet.create({
     alignItems: 'center',
   },
   title: {
-    flex: 8,
+    flex: 3,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -60,6 +60,7 @@ let styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 17,
     color: config.fontColor,
+    textAlign: 'center',
   },
   right: {
     flex: 1,
